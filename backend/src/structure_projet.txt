@@ -1,0 +1,21 @@
+Folder PATH listing
+Volume serial number is 4C98-02A3
+C:.
+|   structure_dossiers.txt
+|   structure_projet.txt
+|   
++---config
+|       api.js
+|       db.js
+|       
++---middleware
+|       auth.middleware.js
+|       
++---routes
+|       auth.routes.js
+|       vendor.routes.js
+|       
+\---utils
+        email.js
+        otpService.js
+        

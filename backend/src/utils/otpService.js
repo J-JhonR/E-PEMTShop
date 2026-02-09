@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const db = require('../config/db');
 
 class OTPService {
   static async generateOTP(email, type) {
