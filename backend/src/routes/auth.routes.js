@@ -101,7 +101,10 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ message: 'Champs manquants' });
 
-    const [[user]] = await pool.query('SELECT id, password_hash, is_active, role FROM users WHERE email = ?', [email]);
+    const [[user]] = await pool.query(
+      'SELECT id, email, first_name, last_name, phone, avatar_url, password_hash, is_active, role FROM users WHERE email = ?',
+      [email]
+    );
     if (!user) return res.status(400).json({ message: 'Utilisateur introuvable' });
 
     const match = await bcrypt.compare(password, user.password_hash);
@@ -113,7 +116,19 @@ router.post('/login', async (req, res) => {
       expiresIn: process.env.JWT_EXPIRES_IN || '7d'
     });
 
-    return res.json({ message: 'Connecté', token, role: user.role });
+    return res.json({
+      message: 'Connect�',
+      token,
+      role: user.role,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        phone: user.phone,
+        avatarUrl: user.avatar_url || null
+      }
+    });
 
   } catch (err) {
     console.error(err);
@@ -422,4 +437,70 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
+// GET /api/auth/vendor-info - Récupérer les infos du vendeur
+router.get('/vendor-info/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    // 1) Récupérer l'utilisateur
+    const [[user]] = await pool.query(
+      'SELECT id, email, first_name, last_name, role FROM users WHERE email = ? AND role = "vendor"',
+      [email]
+    );
+
+    if (!user) {
+      return res.status(400).json({ message: 'Vendeur introuvable' });
+    }
+
+    // 2) Récupérer les infos du vendeur
+    const [[vendor]] = await pool.query(
+      `SELECT id, user_id, business_name, business_type, address, city, postal_code, country, 
+              website, tax_id, monthly_volume, product_categories, status
+       FROM vendors WHERE user_id = ?`,
+      [user.id]
+    );
+
+    if (!vendor) {
+      return res.status(400).json({ message: 'Profil vendeur non trouvé' });
+    }
+
+    // 3) Retourner les infos combinées
+    return res.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        role: user.role
+      },
+      vendor: {
+        id: vendor.id,
+        userId: vendor.user_id,
+        businessName: vendor.business_name,
+        businessType: vendor.business_type,
+        address: vendor.address,
+        city: vendor.city,
+        postalCode: vendor.postal_code,
+        country: vendor.country,
+        website: vendor.website,
+        taxId: vendor.tax_id,
+        monthlyVolume: vendor.monthly_volume,
+        productCategories: vendor.product_categories,
+        status: vendor.status
+      }
+    });
+
+  } catch (err) {
+    console.error('🔥 Erreur vendor-info:', err);
+    return res.status(500).json({ 
+      message: 'Erreur serveur',
+      error: err.message 
+    });
+  }
+});
+
 module.exports = router;
+
+
+

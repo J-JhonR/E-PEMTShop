@@ -1,6 +1,14 @@
 {
+  "name": "pemtshop",
+  "private": true,
+  "scripts": {
+    "dev:full": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\""
+  },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "lucide-react": "^0.563.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

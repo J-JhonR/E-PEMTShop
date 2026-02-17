@@ -3,6 +3,10 @@ const express = require('express');
 const cors = require('cors');
 
 const authRoutes = require('./src/routes/auth.routes');
+const productsRoutes = require('./src/routes/products.routes');
+const orderRoutes = require('./src/routes/order.routes');
+const publicRoutes = require('./src/routes/public.routes');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,6 +23,12 @@ app.use(cors({
 
 // 🔹 Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productsRoutes);
+app.use('/api/vendors', orderRoutes);
+app.use('/api/public', publicRoutes);
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'src', 'uploads')));
 
 // 🔹 Health check
 app.get('/health', (req, res) =>
