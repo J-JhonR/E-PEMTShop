@@ -1,0 +1,38 @@
+Folder PATH listing
+Volume serial number is 4C98-02A3
+C:.
+|   App.jsx
+|   index.css
+|   main.jsx
+|   structure_dossiers.txt
+|   structure_projet.txt
+|   
++---assets
+|       react.svg
+|       
++---components
+|   |   Footer.jsx
+|   |   Navbar.jsx
+|   |   
+|   \---HomeComponents
+|           Banner.jsx
+|           Categories.jsx
+|           FlashSale.jsx
+|           Hero.jsx
+|           PopularProducts.jsx
+|           
++---context
+|       AuthContext.jsx
+|       
+\---pages
+    |   Homepage.jsx
+    |   
+    \---auth
+            ForgotPassword.jsx
+            LoginClient.jsx
+            LoginVendor.jsx
+            RegisterClient.jsx
+            RegisterVendor.jsx
+            ResetPassword.jsx
+            VerifyOTP.jsx
+            

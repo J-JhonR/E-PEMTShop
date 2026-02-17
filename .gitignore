@@ -1,1 +1,7 @@
 node_modules
+frontend/node_modules
+frontend/dist
+frontend/.git_disabled
+backend/node_modules
+backend/src/uploads/*
+!backend/src/uploads/.gitkeep
